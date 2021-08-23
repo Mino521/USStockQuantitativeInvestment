@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ca.server.mapper.DataMapper">
+    <resultMap id="ArchiveContentRM" type="ca.server.DTO.ArchiveContentDTO">
+        <id property="id" column="ID"/>
+        <result property="cik" column="CIK"/>
+        <result property="year" column="Year"/>
+        <result property="earningsPerShare" column="EarningsPerShare"/>
+        <result property="stateCountry" column="State_Country"/>
+        <result property="office" column="Office"/>
+        <result property="company" column="Company"/>
+    </resultMap>
+    <select id="getArchiveByFilter" resultMap="ArchiveContentRM">
+        SELECT ID,archive_content.CIK,Company,Year,EarningsPerShare,State_Country,Office
+        FROM archive_content join COMP_META CM
+                on archive_content.CIK = CM.CIK
+        <where>
+            <if test="DTO.cik != null and DTO.cik.size() != 0">
+                CM.CIK in
+                <foreach collection="DTO.cik" item="item" open="(" separator="," close=")">
+                     #{item}
+                </foreach>
+            </if>
+            <if test="DTO.office != null">
+                and Office = #{DTO.office}
+            </if>
+            <if test="DTO.state != null">
+                and State_Country = #{DTO.state}
+            </if>
+            <if test="DTO.yearStart != null and DTO.yearEnd != null">
+                and Year >= #{DTO.yearStart} and Year &lt;= #{DTO.yearEnd}
+            </if>
+        </where>
+        <if test="DTO.pageSize != null and DTO.pageIndex != null">
+            limit #{DTO.pageIndex},#{DTO.pageSize}
+        </if>
+        ;
+    </select>
+
+
+
+    <update id="updateArchiveData">
+    update archive_content
+    set ${columnName} = #{columnValue}
+        where archive_content.ID = #{id};
+    </update>
+</mapper>

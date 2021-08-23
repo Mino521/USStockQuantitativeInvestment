@@ -1,0 +1,11 @@
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: ca.server.entity
+
+spring:
+  datasource:
+    url: jdbc:sqlite::resource:db/secDB.db
+    driver-class-name: org.sqlite.JDBC
+logging:
+  level:
+    root: debug
