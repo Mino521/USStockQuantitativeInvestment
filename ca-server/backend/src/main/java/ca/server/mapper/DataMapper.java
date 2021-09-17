@@ -13,7 +13,10 @@ import java.util.Map;
 public interface DataMapper {
 
     public List<ArchiveContentDTO> getArchiveByFilter(@Param("DTO") ArchiveFilterDTO archiveFilterDTO);
+
     public Long updateArchiveData(@Param(value = "id")Integer id,
-                                     @Param(value = "columnName")String columnName,
-                                     @Param(value = "columnValue") BigDecimal columnValue);
+                                  @Param(value = "columnName")String columnName,
+                                  @Param(value = "columnValue") BigDecimal columnValue);
+
+    public int getArchiveCountByFilter(@Param("DTO") ArchiveFilterDTO archiveFilterDTO);
 }

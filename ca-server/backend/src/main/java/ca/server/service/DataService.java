@@ -15,13 +15,18 @@ import java.util.Map;
 public class DataService {
     @Resource
     private DataMapper dataMapper;
+
     public List<ArchiveContentDTO> getArchiveByFilter(ArchiveFilterDTO archiveFilterDTO){
         return dataMapper.getArchiveByFilter(archiveFilterDTO);
-
     }
+
     public Long updateArchiveData(@Param(value = "id")Integer id,
-                                     @Param(value = "columnName")String columnName,
-                                     @Param(value = "columnValue") BigDecimal columnValue){
+                                  @Param(value = "columnName")String columnName,
+                                  @Param(value = "columnValue") BigDecimal columnValue){
         return dataMapper.updateArchiveData(id, columnName, columnValue);
+    }
+
+    public int getArchiveCountByFilter(ArchiveFilterDTO archiveFilterDTO){
+        return dataMapper.getArchiveCountByFilter(archiveFilterDTO);
     }
 }

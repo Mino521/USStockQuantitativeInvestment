@@ -20,6 +20,7 @@ import springfox.documentation.swagger2.mappers.RequestParameterMapper;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,14 +43,26 @@ public class DataController {
     @Deprecated
     @GetMapping("/getall")
     @ResponseBody
-    public List<ArchiveContent> getAll(){
-        return testService.getAll();
+    public ResultMapper<Map<String,Object>> getAll(){
+        List<ArchiveContent> res = testService.getAll();
+        ResultMapper<Map<String,Object>> response;
+        Map<String, Object> resMap = new HashMap<>();
+        if(res != null){
+            response = ResultMapper.successResultMapper();
+            resMap.put("count", res.size());
+            resMap.put("dataFound", res);
+            response.setData(resMap);
+        }
+        else {
+            response = ResultMapper.errorResultMapper400();
+        }
+        return response;
     }
 
     @Deprecated
     @GetMapping("/getallarchive")
     @ResponseBody
-    public ResultMapper<List<ArchiveContent>> getAllArchiveContent() throws SQLException, ClassNotFoundException, SQLException {
+    public ResultMapper<List<ArchiveContent>> getAllArchiveContent(){
         List<ArchiveContent> res = testService.getAll();
         if(res == null){
             return ResultMapper.errorResultMapper("No data found.");
@@ -72,12 +85,26 @@ public class DataController {
     })
      */
     @ResponseBody
-    public List<ArchiveContentDTO> getArchiveByFilter(ArchiveFilterDTO archiveFilterDTO){
-        if(archiveFilterDTO.getPageSize()!=null&&archiveFilterDTO.getPageIndex()!=null) {
-            archiveFilterDTO.setPageIndex(archiveFilterDTO.getPageIndex() * archiveFilterDTO.getPageSize());
+    public ResultMapper<Map<String,Object>> getArchiveByFilter(ArchiveFilterDTO archiveFilterDTO){
+//        if(archiveFilterDTO.getPageSize()!=null&&archiveFilterDTO.getPageIndex()!=null) {
+//            archiveFilterDTO.setPageIndex(archiveFilterDTO.getPageIndex() * archiveFilterDTO.getPageSize());
+//        }
+        List<ArchiveContentDTO> res = dataService.getArchiveByFilter(archiveFilterDTO);
+        int count = dataService.getArchiveCountByFilter(archiveFilterDTO);
+        ResultMapper<Map<String,Object>> response;
+        Map<String, Object> resMap = new HashMap<>();
+        if(res != null){
+            response = ResultMapper.successResultMapper();
+            resMap.put("count", count);
+            resMap.put("dataFound", res);
+            response.setData(resMap);
         }
-        return dataService.getArchiveByFilter(archiveFilterDTO);
+        else {
+            response = ResultMapper.errorResultMapper400();
+        }
+        return response;
     }
+
     @ApiOperation(value = "update data by id and column name")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "the record key",required = true),

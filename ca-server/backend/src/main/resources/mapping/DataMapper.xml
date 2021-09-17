@@ -13,12 +13,12 @@
     <select id="getArchiveByFilter" resultMap="ArchiveContentRM">
         SELECT ID,archive_content.CIK,Company,Year,EarningsPerShare,State_Country,Office
         FROM archive_content join COMP_META CM
-                on archive_content.CIK = CM.CIK
+        on archive_content.CIK = CM.CIK
         <where>
             <if test="DTO.cik != null and DTO.cik.size() != 0">
                 CM.CIK in
                 <foreach collection="DTO.cik" item="item" open="(" separator="," close=")">
-                     #{item}
+                    #{item}
                 </foreach>
             </if>
             <if test="DTO.office != null">
@@ -38,10 +38,33 @@
     </select>
 
 
-
     <update id="updateArchiveData">
-    update archive_content
-    set ${columnName} = #{columnValue}
+        update archive_content
+        set ${columnName} = #{columnValue}
         where archive_content.ID = #{id};
     </update>
+
+
+    <select id="getArchiveCountByFilter" resultMap="ArchiveContentRM">
+        SELECT count(*)
+        FROM archive_content join COMP_META CM
+        on archive_content.CIK = CM.CIK
+        <where>
+            <if test="DTO.cik != null and DTO.cik.size() != 0">
+                CM.CIK in
+                <foreach collection="DTO.cik" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="DTO.office != null">
+                and Office = #{DTO.office}
+            </if>
+            <if test="DTO.state != null">
+                and State_Country = #{DTO.state}
+            </if>
+            <if test="DTO.yearStart != null and DTO.yearEnd != null">
+                and Year >= #{DTO.yearStart} and Year &lt;= #{DTO.yearEnd}
+            </if>
+        </where>
+    </select>
 </mapper>
