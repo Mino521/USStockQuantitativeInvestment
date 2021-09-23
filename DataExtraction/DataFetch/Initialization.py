@@ -4,11 +4,12 @@ import constants
 import json
 
 config = {
-    'user': 'root',
-    'password': 'password',
-    'host': '127.0.0.1',  # localhost
+    'host': 'cadb.cc0uav02d2tx.ap-southeast-2.rds.amazonaws.com',
+    'user': 'admin',
+    'password': 'HtIONyOLbioppFsbdSsG',
+    'port': 3306
 }
-DB_NAME = 'Company_analysis_data'
+DB_NAME = 'company_analysis_data'
 
 
 def init():

@@ -7,6 +7,7 @@ def create_database(cursor, DB_NAME):
     try:
         cursor.execute(
             "CREATE DATABASE IF NOT EXISTS {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
+        print("Creating table {}: OK".format(DB_NAME))
     except mysql.connector.Error as err:
         print("Failed creating database: {}".format(err))
         exit(1)
