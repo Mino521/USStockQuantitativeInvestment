@@ -6,7 +6,7 @@ def GordonGrowModel(args):
         if(isinstance(args["dividends"],list)):
             dividendsList = args["dividends"]
             g=math.pow((dividendsList[-1]/dividendsList[0]),(1/(len(dividendsList)-1)))-1
-            result = {"Growth rate": g }
+            result = {"Growth_rate": g }
             predict = [dividendsList[0]]
             for i in range(1,len(dividendsList)):
                 predict.append(predict[i-1]*(1+g))
